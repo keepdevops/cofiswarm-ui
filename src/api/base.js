@@ -6,7 +6,7 @@
 function normalizeApiBase() {
   const raw = process.env.REACT_APP_API_BASE;
   if (raw === undefined || raw === '') {
-    return 'http://localhost:3002/api';
+    return '/api';
   }
   const trimmed = raw.trim().replace(/\/+$/, '');
   if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
@@ -18,17 +18,13 @@ function normalizeApiBase() {
 export const API_BASE = normalizeApiBase();
 
 /**
- * Base URL for the native C++ MLX coordinator routes on :3002.
- * MS-143: dev default moved from :3003 (Python) to :3002 (C++ coordinator).
- * Production: same-origin /api/mlx via nginx → :3002. Override with REACT_APP_MLX_API_BASE.
+ * MLX compat routes on dispatch (:8010), proxied via UI nginx /api/mlx/*.
+ * Override with REACT_APP_MLX_API_BASE.
  */
 function normalizeMlxApiBase() {
   const raw = process.env.REACT_APP_MLX_API_BASE;
   if (raw !== undefined && raw !== '') {
     return raw.trim().replace(/\/+$/, '');
-  }
-  if (process.env.NODE_ENV === 'development') {
-    return 'http://localhost:3002/api/mlx';
   }
   return '/api/mlx';
 }
