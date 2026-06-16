@@ -32,11 +32,11 @@ function normalizeMlxApiBase() {
 export const MLX_API_BASE = normalizeMlxApiBase();
 
 /**
- * Base URL for the RAG ingest sidecar (orchestration/rag/service.py).
- * Default: http://localhost:8001 — set REACT_APP_RAG_INGEST_BASE to override.
+ * RAG ingest API — proxied via UI nginx /rag/* → rag :8001.
+ * Override with REACT_APP_RAG_INGEST_BASE.
  */
 export const RAG_INGEST_BASE = (process.env.REACT_APP_RAG_INGEST_BASE
-  || 'http://localhost:8001').replace(/\/+$/, '');
+  || '/rag').replace(/\/+$/, '');
 
 /** Concurrent callers await one in-flight request (App + CONFIGURE + panels). */
 const inflight = new Map();

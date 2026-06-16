@@ -1,10 +1,16 @@
+# Example — see cofiswarm-ui/deploy/nginx.conf for production routes.
+# UI :3000 → dispatch :8010, rag :8001, configure :8017, etc.
 server {
-  listen 3000;
+  listen 80;
   root /usr/share/nginx/html;
   location / { try_files $uri /index.html; }
+  location /rag/ {
+    proxy_pass http://host.docker.internal:8001/;
+  }
   location /api/ {
-    proxy_pass http://cofiswarm-gateway:3002;
+    proxy_pass http://host.docker.internal:8010/api/;
     proxy_http_version 1.1;
     proxy_set_header Host $host;
+    proxy_buffering off;
   }
 }

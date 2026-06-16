@@ -68,6 +68,25 @@ describe('MLX_API_BASE defaults', () => {
 });
 
 // ---------------------------------------------------------------------------
+// RAG_INGEST_BASE — via UI nginx /rag
+// ---------------------------------------------------------------------------
+
+describe('RAG_INGEST_BASE defaults', () => {
+  const ORIG = process.env.REACT_APP_RAG_INGEST_BASE;
+
+  afterEach(() => {
+    process.env.REACT_APP_RAG_INGEST_BASE = ORIG === undefined ? '' : ORIG;
+    jest.resetModules();
+  });
+
+  test('default resolves to /rag when env unset', () => {
+    delete process.env.REACT_APP_RAG_INGEST_BASE;
+    const { RAG_INGEST_BASE } = require('./base');
+    expect(RAG_INGEST_BASE).toBe('/rag');
+  });
+});
+
+// ---------------------------------------------------------------------------
 // normalizeArchitectResponse
 // ---------------------------------------------------------------------------
 
