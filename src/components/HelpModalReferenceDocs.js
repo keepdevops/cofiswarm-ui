@@ -40,8 +40,8 @@ export default function HelpModalReferenceDocs() {
 
       <div className="help-section">
         <h3>Launch</h3>
-        <code className="help-code">python3 scripts/brewctl check && python3 scripts/brewctl launch</code>
-        <p>Check verifies ports, binaries, and models. Launch starts the C++ proxy (:3002), React UI (:3000), and orchestrate sidecar (:3003). MLX agents are served by an <code>mlx_lm server</code> process (spawned by the proxy, one per MLX model) and reached over HTTP, like llama.cpp and vLLM agents. Use <code>python3 scripts/brewctl shutdown</code> to stop. Build the C++ binaries once with <code>bash scripts/build_cpp_binaries.sh</code>.</p>
+        <code className="help-code">cd ~/cofiswarm/repos/cofiswarm-deploy && make up</code>
+        <p>Starts dispatch (:8010), mode plugins, configure (:8017), RAG (:8001), and the UI gateway on :3000. API calls use same-origin <code>/api</code> through nginx → dispatch. Configure llama agents from the UI (CONFIGURE → LAUNCH SWARM) when <code>MATRIX_LLAMA_SERVER</code> is set. MLX agents use <code>mlx_lm.server</code> processes started by configure, like llama.cpp agents.</p>
       </div>
 
       <div className="help-section">
