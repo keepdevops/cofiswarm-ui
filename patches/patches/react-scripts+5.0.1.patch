@@ -1,0 +1,86 @@
+diff --git a/node_modules/react-scripts/config/webpackDevServer.config.js b/node_modules/react-scripts/config/webpackDevServer.config.js
+index 522a81b..fcf68f2 100644
+--- a/node_modules/react-scripts/config/webpackDevServer.config.js
++++ b/node_modules/react-scripts/config/webpackDevServer.config.js
+@@ -99,7 +99,7 @@ module.exports = function (proxy, allowedHost) {
+       publicPath: paths.publicUrlOrPath.slice(0, -1),
+     },
+ 
+-    https: getHttpsConfig(),
++    server: getHttpsConfig() ? { type: 'https', options: getHttpsConfig() } : 'http',
+     host,
+     historyApiFallback: {
+       // Paths with dots should still use the history fallback.
+@@ -109,27 +109,16 @@ module.exports = function (proxy, allowedHost) {
+     },
+     // `proxy` is run between `before` and `after` `webpack-dev-server` hooks
+     proxy,
+-    onBeforeSetupMiddleware(devServer) {
+-      // Keep `evalSourceMapMiddleware`
+-      // middlewares before `redirectServedPath` otherwise will not have any effect
+-      // This lets us fetch source contents from webpack for the error overlay
++    setupMiddlewares(middlewares, devServer) {
+       devServer.app.use(evalSourceMapMiddleware(devServer));
+-
+       if (fs.existsSync(paths.proxySetup)) {
+-        // This registers user provided middleware for proxy reasons
+         require(paths.proxySetup)(devServer.app);
+       }
+-    },
+-    onAfterSetupMiddleware(devServer) {
+-      // Redirect to `PUBLIC_URL` or `homepage` from `package.json` if url not match
+-      devServer.app.use(redirectServedPath(paths.publicUrlOrPath));
+-
+-      // This service worker file is effectively a 'no-op' that will reset any
+-      // previous service worker registered for the same host:port combination.
+-      // We do this in development to avoid hitting the production cache if
+-      // it used the same host and port.
+-      // https://github.com/facebook/create-react-app/issues/2272#issuecomment-302832432
+-      devServer.app.use(noopServiceWorkerMiddleware(paths.publicUrlOrPath));
++      middlewares.push(
++        { name: 'redirect-served-path', middleware: redirectServedPath(paths.publicUrlOrPath) },
++        { name: 'noop-service-worker', middleware: noopServiceWorkerMiddleware(paths.publicUrlOrPath) }
++      );
++      return middlewares;
+     },
+   };
+ };
+diff --git a/node_modules/react-scripts/scripts/start.js b/node_modules/react-scripts/scripts/start.js
+index 522a81b..fcf68f2 100644
+--- a/node_modules/react-scripts/scripts/start.js
++++ b/node_modules/react-scripts/scripts/start.js
+@@ -139,19 +139,27 @@
+       openBrowser(urls.localUrlForBrowser);
+     });
+ 
+-    ['SIGINT', 'SIGTERM'].forEach(function (sig) {
+-      process.on(sig, function () {
++    // webpack-dev-server v5 removed `close()`; use `stopCallback` (CRA still calls close).
++    function shutdownDevServer() {
++      if (typeof devServer.stopCallback === 'function') {
++        devServer.stopCallback(function () {
++          process.exit();
++        });
++      } else if (typeof devServer.close === 'function') {
+         devServer.close();
+         process.exit();
+-      });
++      } else {
++        process.exit();
++      }
++    }
++
++    ['SIGINT', 'SIGTERM'].forEach(function (sig) {
++      process.on(sig, shutdownDevServer);
+     });
+ 
+     if (process.env.CI !== 'true') {
+       // Gracefully exit when stdin ends
+-      process.stdin.on('end', function () {
+-        devServer.close();
+-        process.exit();
+-      });
++      process.stdin.on('end', shutdownDevServer);
+     }
+   })
+   .catch(err => {

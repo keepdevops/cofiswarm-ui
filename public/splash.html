@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cofiswarm — The Local-First Multi-Agent Coding Swarm</title>
+  <meta name="description" content="Cofiswarm: 13 specialised AI coding agents running locally in parallel on Apple Silicon (MLX) or CUDA (vLLM). Privacy-first, no cloud, no API keys." />
+  <style>
+    :root {
+      /* Brand tokens (from project badges + Matrix theme) */
+      --bg:        #05080a;
+      --bg-panel:  #0b1014;
+      --bg-card:   #0e151a;
+      --ink:       #d8e0e4;
+      --ink-dim:   #8a8a99;
+      --cyan:      #00ccff;
+      --green:     #00ff9d;
+      --line:      rgba(0, 255, 157, 0.18);
+      --line-soft: rgba(138, 138, 153, 0.20);
+
+      /* Typography — Times Roman throughout */
+      --serif: "Times New Roman", Times, "Liberation Serif", serif;
+
+      /* Spacing scale */
+      --sp-1: 8px;
+      --sp-2: 16px;
+      --sp-3: 24px;
+      --sp-4: 40px;
+      --sp-5: 64px;
+      --sp-6: 96px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 18px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 var(--sp-3);
+    }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line-soft);
+      background:
+        radial-gradient(1200px 480px at 75% -10%, rgba(0, 204, 255, 0.10), transparent 60%),
+        radial-gradient(900px 420px at 10% 120%, rgba(0, 255, 157, 0.08), transparent 60%),
+        var(--bg);
+    }
+
+    /* faint matrix rain grid */
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--line-soft) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+      background-size: 36px 36px;
+      opacity: 0.25;
+      mask-image: radial-gradient(circle at 50% 30%, #000 30%, transparent 75%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      padding: var(--sp-6) var(--sp-3);
+      text-align: center;
+    }
+    .hero-copy { margin: 0 auto; max-width: 56ch; }
+    .hero-copy .tagline,
+    .hero-copy .lede { max-width: none; }
+
+    .eyebrow {
+      font-variant: small-caps;
+      letter-spacing: 0.18em;
+      font-size: 0.95rem;
+      color: var(--green);
+      margin: 0 0 var(--sp-2);
+    }
+
+    h1.title {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: clamp(3rem, 7vw, 5.6rem);
+      line-height: 0.98;
+      margin: 0 0 var(--sp-2);
+      letter-spacing: -0.01em;
+    }
+    h1.title .accent {
+      color: var(--cyan);
+      font-style: italic;
+    }
+
+    .tagline {
+      font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+      font-style: italic;
+      color: var(--ink);
+      margin: 0 0 var(--sp-3);
+      max-width: 34ch;
+    }
+
+    .lede {
+      color: var(--ink-dim);
+      font-size: 1.05rem;
+      margin: 0 0 var(--sp-4);
+      max-width: 46ch;
+    }
+
+    .cta-row { display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: center; }
+
+    .btn {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      padding: 12px 26px;
+      border-radius: 2px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      display: inline-block;
+    }
+    .btn-primary {
+      background: var(--green);
+      color: #03110b;
+      font-weight: 700;
+      box-shadow: 0 0 0 0 rgba(0, 255, 157, 0.5);
+    }
+    .btn-primary:hover {
+      text-decoration: none;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 22px -6px rgba(0, 255, 157, 0.55);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--cyan);
+      border-color: var(--line);
+    }
+    .btn-ghost:hover { text-decoration: none; border-color: var(--cyan); }
+
+    .install {
+      margin-top: var(--sp-3);
+      font-family: var(--serif);
+      color: var(--ink-dim);
+      font-size: 0.95rem;
+    }
+    .install code {
+      font-family: "Courier New", monospace;
+      background: var(--bg-card);
+      color: var(--green);
+      border: 1px solid var(--line);
+      padding: 6px 12px;
+      border-radius: 2px;
+      display: inline-block;
+      margin-top: 6px;
+    }
+
+    /* hero art */
+    .hero-art {
+      position: relative;
+      text-align: center;
+    }
+    .hero-art .ring {
+      position: absolute;
+      inset: -8% -8%;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      opacity: 0.5;
+    }
+    .hero-art .ring.two { inset: 6% 6%; border-color: rgba(0,204,255,0.25); }
+    .hero-art img {
+      position: relative;
+      width: min(360px, 90%);
+      border-radius: 6px;
+      box-shadow: 0 30px 80px -30px rgba(0, 204, 255, 0.45);
+      background: #fff;
+    }
+    .hero-art figcaption {
+      margin-top: var(--sp-2);
+      font-style: italic;
+      color: var(--ink-dim);
+      font-size: 0.95rem;
+    }
+
+    /* ---------- Stat strip ---------- */
+    .stats {
+      border-bottom: 1px solid var(--line-soft);
+      background: var(--bg-panel);
+    }
+    .stats-inner {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      text-align: center;
+    }
+    .stat {
+      padding: var(--sp-4) var(--sp-2);
+      border-left: 1px solid var(--line-soft);
+    }
+    .stat:first-child { border-left: 0; }
+    .stat .num {
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: var(--cyan);
+      line-height: 1;
+    }
+    .stat .lab {
+      font-variant: small-caps;
+      letter-spacing: 0.1em;
+      color: var(--ink-dim);
+      margin-top: 6px;
+      font-size: 0.95rem;
+    }
+
+    /* ---------- Features ---------- */
+    section { padding: var(--sp-6) 0; }
+    .section-head {
+      text-align: center;
+      margin-bottom: var(--sp-5);
+    }
+    .section-head h2 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      margin: 0 0 var(--sp-1);
+      font-weight: 700;
+    }
+    .section-head p {
+      color: var(--ink-dim);
+      font-style: italic;
+      margin: 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-3);
+    }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: 4px;
+      padding: var(--sp-3);
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+    .card:hover {
+      border-color: var(--line);
+      transform: translateY(-2px);
+    }
+    .card h3 {
+      margin: 0 0 var(--sp-1);
+      font-size: 1.35rem;
+      color: var(--green);
+    }
+    .card p { margin: 0; color: var(--ink-dim); font-size: 1rem; }
+
+    /* ---------- Modes ---------- */
+    .modes {
+      background: var(--bg-panel);
+      border-top: 1px solid var(--line-soft);
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .mode-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--sp-2);
+    }
+    .mode {
+      text-align: center;
+      padding: var(--sp-3) var(--sp-2);
+      border: 1px dashed var(--line-soft);
+      border-radius: 4px;
+    }
+    .mode .name {
+      font-variant: small-caps;
+      letter-spacing: 0.08em;
+      font-size: 1.3rem;
+      color: var(--cyan);
+    }
+    .mode .desc { color: var(--ink-dim); font-size: 0.95rem; margin-top: 6px; }
+
+    /* ---------- Footer ---------- */
+    footer {
+      text-align: center;
+      padding: var(--sp-5) var(--sp-3) var(--sp-4);
+      color: var(--ink-dim);
+      font-size: 0.95rem;
+    }
+    footer .marks { margin-bottom: var(--sp-2); }
+    footer .marks a { margin: 0 var(--sp-1); }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 860px) {
+      .hero-inner { grid-template-columns: 1fr; gap: var(--sp-4); padding: var(--sp-5) var(--sp-3); }
+      .hero-art { order: -1; }
+      .stats-inner { grid-template-columns: repeat(2, 1fr); }
+      .stat:nth-child(3) { border-left: 0; }
+      .grid { grid-template-columns: 1fr; }
+      .mode-row { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow">Local-first · No cloud · No API keys</p>
+        <h1 class="title">Cofi<span class="accent">swarm</span></h1>
+        <p class="tagline">A thirteen-agent coding swarm that lives entirely on your own machine.</p>
+        <p class="lede">
+          Dispatch a single prompt to specialised agents — architect, programmer,
+          security, reviewer and more — orchestrated across four modes against local
+          inference servers (llama.cpp · MLX · vLLM). Privacy-first, air-gappable,
+          and instant.
+        </p>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="wrap stats-inner">
+      <div class="stat"><div class="num">13</div><div class="lab">Specialised Agents</div></div>
+      <div class="stat"><div class="num">4</div><div class="lab">Orchestration Modes</div></div>
+      <div class="stat"><div class="num">3</div><div class="lab">Inference Engines</div></div>
+      <div class="stat"><div class="num">0</div><div class="lab">Cloud Calls</div></div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Your machine, your model, your code</h2>
+        <p>Everything runs on Apple Silicon (MLX) or NVIDIA (vLLM) — nothing leaves the box.</p>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <h3>13 Specialised Roles</h3>
+          <p>Architect, foreman, programmer, security, database, frontend, reviewer,
+             tester, debugger, optimizer, scout, mlx-scout and synthesis — each with
+             a tuned system prompt.</p>
+        </div>
+        <div class="card">
+          <h3>Mix Backends Per Agent</h3>
+          <p>Point any agent at any model. Blend MLX, llama.cpp and vLLM in a single
+             swarm, with per-agent model overrides from the configure panel.</p>
+        </div>
+        <div class="card">
+          <h3>Multi-Turn Threads</h3>
+          <p>Sessions auto-continue after the first broadcast. The conversation
+             thread panel keeps full turn history, persisted to disk.</p>
+        </div>
+        <div class="card">
+          <h3>pgvector RAG Context</h3>
+          <p>Per-agent codebase retrieval injects relevant context so every agent
+             reasons over your repository, not a stale snapshot.</p>
+        </div>
+        <div class="card">
+          <h3>Live Metrics Dashboard</h3>
+          <p>Monitor popout shows KV-cache pressure, unified-memory gauges and
+             per-port MLX telemetry in real time.</p>
+        </div>
+        <div class="card">
+          <h3>Built for Privacy</h3>
+          <p>No cloud dependency, no API keys, fully air-gappable. A React UI talking
+             to a C++ coordinator over local ports.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODES -->
+  <section class="modes">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Four ways to orchestrate</h2>
+        <p>Selectable from the UI mode menu — broadcast, chain, reduce or route.</p>
+      </div>
+      <div class="mode-row">
+        <div class="mode"><div class="name">Flat</div><div class="desc">Broadcast the prompt to every agent in parallel.</div></div>
+        <div class="mode"><div class="name">Pipeline</div><div class="desc">Sequential chain; each agent builds on the last.</div></div>
+        <div class="mode"><div class="name">Cascade</div><div class="desc">Mixture-of-agents reduced by a synthesizer.</div></div>
+        <div class="mode"><div class="name">Router</div><div class="desc">A classifier picks the right agents by live load.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <p>© 2026 Coficube · Built local, run local.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

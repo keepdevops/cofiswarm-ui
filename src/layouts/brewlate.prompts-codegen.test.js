@@ -1,0 +1,74 @@
+/**
+ * Prompt submit + code generation wiring (Brewlatte).
+ */
+const fs = require('fs');
+const path = require('path');
+const { extractCodeBlock } = require('../utils/codeExtractor');
+
+const ROOT = path.join(__dirname, '..');
+
+function read(rel) {
+  return fs.readFileSync(path.join(ROOT, rel), 'utf8');
+}
+
+describe('Prompts and code generation', () => {
+  const brew = read('layouts/BrewlateLayout.js') + [
+    'layouts/useBrewConfig.js', 'layouts/BrewConfigPanel.js', 'layouts/BrewConfigAgentsSection.js',
+    'layouts/BrewRightPanel.js',
+    'layouts/BrewPreviewPanel.js', 'layouts/BrewOverlays.js', 'layouts/BrewHistoryDropdown.js',
+    'layouts/BrewSessionTab.js', 'layouts/BrewAgentsTab.js', 'layouts/BrewBroadcastTab.js',
+    'layouts/BrewRagTab.js',
+  ].map(f => read(f)).join('\n');
+  const prompt = read('components/PromptInput.js') + read('components/usePromptInput.js');
+  const stream = read('api/streamApi.js');
+  const submitHandlers = read('hooks/useSubmitHandlers.js');
+
+  it('Brewlatte wires PromptInput → onSubmit with temperature', () => {
+    expect(brew).toMatch(/<PromptInput/);
+    expect(brew).toMatch(/onSubmit=\{onSubmit\}/);
+    expect(prompt).toMatch(/onSubmit\(prompt\.trim\(\), temperature/);
+    expect(prompt).toMatch(/placeholder=.*prompt/i);
+  });
+
+  it('Brewlatte uses SUBMIT PROMPT label', () => {
+    expect(brew).toMatch(/submitLabel="SUBMIT PROMPT"/);
+  });
+
+  it('streaming path targets /api/architect/stream', () => {
+    expect(stream).toMatch(/architect\/stream/);
+    expect(stream).toMatch(/onToken/);
+    expect(stream).toMatch(/eventName === 'token'/);
+    expect(stream).toMatch(/eventName === 'metrics'/);
+  });
+
+  it('handleSaveCode aggregates fenced code from agents', () => {
+    expect(submitHandlers).toMatch(/buildCodeExport/);
+    expect(submitHandlers).toMatch(/handleSaveCode/);
+    expect(brew).toMatch(/onSaveCode=\{onSaveCode\}/);
+    expect(brew).toMatch(/BrewCodeResultsPanel/);
+  });
+
+  it('programmer-style model output parses to python for CodeMirror', () => {
+    const sample = [
+      'Implement fibonacci:\n',
+      '```python\n',
+      'def fib(n):\n',
+      '    a, b = 0, 1\n',
+      '    for _ in range(n):\n',
+      '        a, b = b, a + b\n',
+      '    return a\n',
+      '```\n',
+    ].join('');
+    const { code, language } = extractCodeBlock(sample);
+    expect(language).toBe('python');
+    expect(code).toContain('def fib');
+    expect(code.length).toBeGreaterThanOrEqual(10);
+  });
+
+  it('quality pass and follow-up hooks exist for iterative codegen', () => {
+    expect(brew).toMatch(/onQualityPass=\{onQualityPass\}/);
+    expect(brew).toMatch(/onFollowUp=\{onFollowUp\}/);
+    expect(submitHandlers).toMatch(/handleQualityPass/);
+    expect(submitHandlers).toMatch(/qualityPass:\s*true/);
+  });
+});

@@ -1,0 +1,391 @@
+/* Light theme overrides. Activated by `data-theme="light"` on <body>.
+   Mirrors the dark App.css palette but flips surfaces to cream/white and
+   swaps neon matrix-green for a darker, readable green. */
+
+body[data-theme="light"] {
+  background-color: #f6f5f0;
+  color: var(--color-text-body, #24292f);
+  --panel-bg: #ffffff;
+  --panel-border: #d8d6cc;
+  --color-primary: #1a56db;
+  --color-primary-dim: #1447b8;
+  --color-primary-glow: rgba(26, 86, 219, 0.25);
+  --color-primary-hover: rgba(26, 86, 219, 0.08);
+  --color-primary-tint: rgba(26, 86, 219, 0.05);
+  --color-primary-tint-sm: rgba(26, 86, 219, 0.08);
+  --color-primary-tint-xs: rgba(26, 86, 219, 0.04);
+  --color-accent: #5850c8;
+  --color-accent-dim: rgba(88, 80, 200, 0.10);
+  --color-warn: #b45309;
+  --color-warn-dim: rgba(180, 83, 9, 0.10);
+  --color-error: #c0392b;
+  --color-error-dim: rgba(192, 57, 43, 0.10);
+  --color-orange: #c4520a;
+  --btn-ghost-color:  #1a56db;
+  --btn-ghost-border: #bec6e8;
+  --btn-primary-bg:   #1a56db;
+  --btn-primary-border: #1a56db;
+  --btn-primary-hover-bg: #1447b8;
+}
+
+body[data-theme="light"] h1 {
+  text-shadow: 0 0 6px rgba(0, 140, 60, 0.25);
+}
+
+/* Surfaces */
+body[data-theme="light"] header { border-bottom-color: #d8d6cc; }
+body[data-theme="light"] .agent-card,
+body[data-theme="light"] .config-panel,
+body[data-theme="light"] .help-modal,
+body[data-theme="light"] .history-dropdown,
+body[data-theme="light"] .final-answer-panel,
+body[data-theme="light"] .mode-selector,
+body[data-theme="light"] .agent-editor-modal { background: #ffffff; }
+
+/* Mode dropdown — popover and options need explicit light surfaces */
+body[data-theme="light"] .mode-popover {
+  background: #ffffff;
+  border-color: #c0bfdf;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+body[data-theme="light"] .mode-option {
+  color: #1a1a1f;
+  border-bottom-color: #e8e6f0;
+}
+body[data-theme="light"] .mode-option:hover {
+  background: rgba(88, 80, 200, 0.07);
+}
+body[data-theme="light"] .mode-option.selected {
+  background: rgba(88, 80, 200, 0.12);
+  color: #5850c8;
+}
+body[data-theme="light"] .mode-option-name { color: inherit; }
+body[data-theme="light"] .mode-option-desc { color: #6a6a75; }
+
+body[data-theme="light"] .agent-response,
+body[data-theme="light"] .agent-editor-modal-content,
+body[data-theme="light"] textarea,
+body[data-theme="light"] input[type="text"],
+body[data-theme="light"] input[type="number"],
+body[data-theme="light"] select,
+body[data-theme="light"] pre,
+body[data-theme="light"] code { background: #ecebe4; color: #0f3d24; }
+
+
+/* Status / accents: keep blue/red/purple but soften backgrounds */
+body[data-theme="light"] .status-online { color: #1a56db; border-color: #1a56db; }
+body[data-theme="light"] .status-offline { color: #C04A00; border-color: #C04A00; }
+body[data-theme="light"] .engine-badge {
+  color: #6d28d9;
+  background: rgba(109, 40, 217, 0.08);
+  border-color: rgba(109, 40, 217, 0.4);
+}
+
+/* Agent grid cards keep their per-agent accent (--agent-color) but get a
+   light surface and dark text. */
+body[data-theme="light"] .agent-card {
+  border: 1px solid #d8d6cc;
+  border-top-color: var(--agent-color, #008c2a);
+}
+body[data-theme="light"] .agent-name { color: var(--agent-color, #008c2a); }
+
+/* History rows */
+body[data-theme="light"] .history-item:hover { background: rgba(0, 140, 42, 0.06); }
+body[data-theme="light"] .history-time { color: #6a6a75; }
+
+/* Error banner */
+body[data-theme="light"] .error-banner {
+  background: rgba(192, 74, 0, 0.08);
+  color: #C04A00;
+  border-color: #C04A00;
+}
+
+/* Agent expand modal (pop-out) */
+body[data-theme="light"] .help-overlay { background: rgba(40, 40, 50, 0.45); }
+body[data-theme="light"] .agent-editor-modal {
+  background: #ffffff;
+  border: 1px solid #d8d6cc;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+}
+body[data-theme="light"] .agent-editor-modal-header {
+  background: #ecebe4;
+  border-bottom: 1px solid #d8d6cc;
+}
+body[data-theme="light"] .agent-editor-modal-name { color: var(--agent-color, #008c2a); }
+body[data-theme="light"] .agent-editor-modal-content { background: #ffffff; }
+body[data-theme="light"] .agent-editor-close { color: #6a6a75; }
+body[data-theme="light"] .agent-editor-close:hover { color: #C04A00; }
+
+/* CodeMirror inside the pop-out */
+body[data-theme="light"] .code-display-container {
+  background: #ffffff;
+  border-color: #d8d6cc;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+body[data-theme="light"] .code-display-header {
+  background: #ecebe4;
+  border-bottom-color: #d8d6cc;
+}
+body[data-theme="light"] .code-lang-tag { color: #4a4a55; }
+body[data-theme="light"] .toolbar-btn {
+  background: #f6f5f0;
+  color: #1a1a1f;
+  border-color: #d8d6cc;
+}
+body[data-theme="light"] .toolbar-btn:hover {
+  background: #ecebe4;
+  border-color: #1a56db;
+  color: #1a56db;
+}
+body[data-theme="light"] .toolbar-btn.active {
+  background: #d97706;
+  color: #ffffff;
+  border-color: #d97706;
+}
+body[data-theme="light"] .cm-editor { background-color: #ffffff !important; color: #1a1a1f; }
+body[data-theme="light"] .cm-gutters {
+  background-color: #ecebe4 !important;
+  color: #6a6a75 !important;
+  border-right: 1px solid #d8d6cc !important;
+}
+body[data-theme="light"] .cm-activeLine { background-color: rgba(0, 140, 42, 0.06) !important; }
+body[data-theme="light"] .cm-activeLineGutter { background-color: rgba(0, 140, 42, 0.10) !important; }
+body[data-theme="light"] .cm-cursor { border-left-color: #008c2a !important; }
+body[data-theme="light"] .cm-selectionBackground,
+body[data-theme="light"] .cm-content ::selection { background-color: rgba(0, 140, 42, 0.20) !important; }
+
+/* Muted text */
+body[data-theme="light"] .agent-meta,
+body[data-theme="light"] .agent-token-stats,
+body[data-theme="light"] .muted,
+body[data-theme="light"] .help-modal p { color: #4a4a55; }
+
+/* ========== Configure (SwarmConfig) panel ========== */
+body[data-theme="light"] .swarm-config {
+  background: #ffffff;
+  border-color: #d8d6cc;
+}
+
+body[data-theme="light"] .swarm-config-title {
+  color: #008c2a;
+  border-bottom-color: #d8d6cc;
+}
+
+body[data-theme="light"] .swarm-role-row.active {
+  background: rgba(0, 140, 42, 0.06);
+  border-color: #d8d6cc;
+}
+body[data-theme="light"] .swarm-role-name { color: #1a1a1f; }
+body[data-theme="light"] .swarm-role-row.active .swarm-role-name { color: #008c2a; }
+body[data-theme="light"] .swarm-role-check input[type="checkbox"] { accent-color: #008c2a; }
+
+body[data-theme="light"] .swarm-model-select {
+  background: #ecebe4;
+  border-color: #d8d6cc;
+  color: #4a4a55;
+}
+body[data-theme="light"] .swarm-model-select:focus {
+  border-color: #008c2a;
+  color: #1a1a1f;
+}
+
+body[data-theme="light"] .swarm-profile-label { color: #4a4a55; }
+body[data-theme="light"] .swarm-profile-btn {
+  background: #ecebe4;
+  border-color: #d8d6cc;
+  color: #4a4a55;
+}
+body[data-theme="light"] .swarm-profile-btn:hover {
+  border-color: #1a56db;
+  color: #1a1a1f;
+}
+body[data-theme="light"] .swarm-profile-btn.active {
+  color: #1a56db;
+  border-color: #1a56db;
+  background: rgba(26, 86, 219, 0.1);
+}
+body[data-theme="light"] .swarm-profile-note { color: #6a6a75; }
+
+/* Layout preview */
+body[data-theme="light"] .swarm-layout-row {
+  background: #ecebe4;
+  border-color: #d8d6cc;
+}
+body[data-theme="light"] .layout-port { color: #1a56db; }
+body[data-theme="light"] .layout-agents { color: #1a1a1f; }
+body[data-theme="light"] .layout-model { color: #6a6a75; }
+body[data-theme="light"] .layout-empty { color: #6a6a75; }
+body[data-theme="light"] .layout-engine-llama { color: #b45309; }
+body[data-theme="light"] .layout-engine-mlx   { color: #008c2a; }
+body[data-theme="light"] .layout-engine-vllm  { color: #c2410c; }
+
+/* Risk card */
+body[data-theme="light"] .swarm-risk-card {
+  background: #ecebe4;
+  border-color: #d8d6cc;
+  border-left-color: #d8d6cc;
+}
+body[data-theme="light"] .swarm-risk-card.risk-low { border-left-color: #008c2a; }
+body[data-theme="light"] .swarm-risk-card.risk-medium { border-left-color: #b45309; }
+body[data-theme="light"] .swarm-risk-card.risk-high { border-left-color: #C04A00; }
+body[data-theme="light"] .swarm-risk-header { color: #4a4a55; }
+body[data-theme="light"] .swarm-risk-badge.risk-low { color: #008c2a; }
+body[data-theme="light"] .swarm-risk-badge.risk-medium { color: #b45309; }
+body[data-theme="light"] .swarm-risk-badge.risk-high { color: #C04A00; }
+body[data-theme="light"] .swarm-risk-score { color: #1a1a1f; }
+body[data-theme="light"] .swarm-risk-mixed {
+  color: #1a56db;
+  border-color: rgba(26, 86, 219, 0.4);
+  background: rgba(26, 86, 219, 0.08);
+}
+body[data-theme="light"] .swarm-risk-hint { color: #6a6a75; }
+body[data-theme="light"] .swarm-risk-block {
+  color: #C04A00;
+  border-color: rgba(192, 74, 0, 0.4);
+  background: rgba(192, 74, 0, 0.08);
+}
+body[data-theme="light"] .swarm-risk-row {
+  background: #ffffff;
+  border-color: #d8d6cc;
+}
+body[data-theme="light"] .swarm-risk-model { color: #1a1a1f; }
+body[data-theme="light"] .swarm-risk-engine,
+body[data-theme="light"] .swarm-risk-math { color: #6a6a75; }
+body[data-theme="light"] .swarm-risk-warn { color: #b45309; }
+
+/* Offline / errors / logs */
+body[data-theme="light"] .swarm-config-offline {
+  background: rgba(192, 74, 0, 0.06);
+  border-color: rgba(192, 74, 0, 0.4);
+}
+body[data-theme="light"] .swarm-offline-title { color: #C04A00; }
+body[data-theme="light"] .swarm-offline-msg { color: #1a1a1f; }
+body[data-theme="light"] .swarm-offline-cmd {
+  color: #008c2a;
+  background: #ecebe4;
+  border-color: #d8d6cc;
+}
+body[data-theme="light"] .swarm-offline-detail { color: #6a6a75; }
+
+body[data-theme="light"] .swarm-config-error {
+  background: rgba(192, 74, 0, 0.08);
+  border-color: #C04A00;
+  color: #C04A00;
+}
+body[data-theme="light"] .swarm-config-deploying { color: #b45309; }
+body[data-theme="light"] .swarm-config-logs-title { color: #4a4a55; }
+body[data-theme="light"] .swarm-config-log-block { border-color: #d8d6cc; }
+body[data-theme="light"] .swarm-config-log-port {
+  color: #1a56db;
+  background: #ecebe4;
+}
+body[data-theme="light"] .swarm-config-log-pre {
+  background: #ffffff;
+  color: #1a1a1f;
+}
+
+/* Deploy button */
+body[data-theme="light"] .swarm-deploy-btn {
+  background: #1a56db;
+  color: #ffffff;
+}
+body[data-theme="light"] .swarm-deploy-btn:hover:not(:disabled) {
+  background: #2563eb;
+  box-shadow: 0 0 12px rgba(26, 86, 219, 0.3);
+}
+body[data-theme="light"] .swarm-deploy-btn:disabled {
+  background: #c4c2b8;
+  color: #6a6a75;
+}
+body[data-theme="light"] .swarm-deploy-btn.deploying {
+  background: #b45309;
+  color: #ffffff;
+}
+
+/* Engine selector */
+body[data-theme="light"] .swarm-engine-row { border-bottom-color: #d8d6cc; }
+body[data-theme="light"] .swarm-engine-label { color: #4a4a55; }
+body[data-theme="light"] .swarm-engine-toggle { border-color: #d8d6cc; }
+body[data-theme="light"] .swarm-engine-btn { color: #6a6a75; }
+body[data-theme="light"] .swarm-engine-btn + .swarm-engine-btn { border-left-color: #d8d6cc; }
+body[data-theme="light"] .swarm-engine-btn:hover:not(.disabled) {
+  color: #1a1a1f;
+  background: rgba(0, 0, 0, 0.04);
+}
+body[data-theme="light"] .swarm-engine-btn.active.engine-llama {
+  background: rgba(26, 86, 219, 0.1);
+  color: #1a56db;
+}
+body[data-theme="light"] .swarm-engine-btn.active.engine-mlx {
+  background: rgba(0, 140, 42, 0.1);
+  color: #008c2a;
+}
+body[data-theme="light"] .swarm-engine-btn.active.engine-vllm {
+  background: rgba(194, 65, 12, 0.12);
+  color: #c2410c;
+}
+body[data-theme="light"] .swarm-engine-in-use { color: #6d28d9; }
+body[data-theme="light"] .swarm-engine-in-use strong { color: #5b21b6; }
+body[data-theme="light"] .swarm-engine-warn { color: #C04A00; }
+
+/* KV pressure gauge — keep label blue, keep LCD readout dark for that
+   classic backlit-LCD look even in light mode. */
+body[data-theme="light"] .kv-gauge {
+  background: #ffffff;
+  border-color: #c8d4e3;
+  --kv-ok:    #008c2a;
+  --kv-warn:  #b45309;
+  --kv-crit:  #c0392b;
+  --kv-label: #1a56db;
+}
+body[data-theme="light"] .kv-gauge-label {
+  color: #1a56db;
+  text-shadow: 0 0 4px rgba(26, 86, 219, 0.35);
+}
+body[data-theme="light"] .kv-gauge-track {
+  background: #d4dce8;
+  border-color: #c8d4e3;
+}
+body[data-theme="light"] .kv-gauge-seg {
+  background: rgba(0, 0, 0, 0.04);
+}
+body[data-theme="light"] .kv-gauge-digital {
+  background: #1a1a2e;
+  border-color: #0d0d1a;
+}
+
+/* MetricsStrip — light theme. Mirrors the surface used by FinalAnswerPanel. */
+body[data-theme="light"] .metrics-strip {
+  background: #f3f4f6;
+  border-color: #c8d4e3;
+  color: #1f2937;
+}
+body[data-theme="light"] .metrics-strip-title { color: #475569; }
+body[data-theme="light"] .metrics-strip-totals { color: #64748b; opacity: 1; }
+body[data-theme="light"] .metrics-strip-name { color: #1f2937; opacity: 1; }
+body[data-theme="light"] .metrics-strip-ms,
+body[data-theme="light"] .metrics-strip-tokens {
+  color: #334155;
+  opacity: 1;
+}
+body[data-theme="light"] .metrics-strip-bar { background: #d8e0e8; }
+body[data-theme="light"] .metrics-strip-bar-fill { background: #1a56db; }
+body[data-theme="light"] .metrics-strip-pct { color: #64748b; opacity: 1; }
+
+/* PresetsPanel — light theme. White-on-cream rows with subtle borders. */
+body[data-theme="light"] .presets-empty { color: #475569; opacity: 1; }
+body[data-theme="light"] .preset-row {
+  background: #ffffff;
+  border-color: #c8d4e3;
+  color: #1f2937;
+}
+body[data-theme="light"] .preset-row-name { color: #1f2937; }
+body[data-theme="light"] .preset-row-meta { color: #475569; opacity: 1; }
+body[data-theme="light"] .preset-row-delete {
+  border-color: #c8d4e3;
+  color: #1f2937;
+}
+body[data-theme="light"] .preset-row-delete:hover:not(:disabled) {
+  background: rgba(220, 38, 38, 0.1);
+  color: #b91c1c;
+}

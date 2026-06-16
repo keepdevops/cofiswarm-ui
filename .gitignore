@@ -8,3 +8,6 @@ test/standalone/run/**/*
 !test/standalone/run/**/.gitkeep
 .env
 *.log
+node_modules/
+build/
+coverage/

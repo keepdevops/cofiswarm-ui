@@ -1,0 +1,7 @@
+[
+  { "name": "Meta-Llama-3.1-8B-Instruct-Q4_K_M", "path": "/Users/Shared/llama/models/GGUF/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf", "backend": "llama" },
+  { "name": "Codestral-22B-v0.1-Q4_K_M",         "path": "/Users/Shared/llama/models/22B/GGUF/Codestral-22B-v0.1-Q4_K_M.gguf",   "backend": "llama" },
+  { "name": "gemma-4-31b-4bit",                   "path": "/Users/Shared/llama/models/MLX/MLX/gemma-4-31b-4bit",                   "backend": "mlx"   },
+  { "name": "ai/llama3.2",                        "path": "ai/llama3.2",                                                            "backend": "docker" },
+  { "name": "ai/gemma3",                          "path": "ai/gemma3",                                                              "backend": "docker" }
+]
