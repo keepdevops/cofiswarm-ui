@@ -23,8 +23,10 @@ export function submitOrchestrateStream(mode, prompt, params = {}, opts = {}, ca
   const controller = new AbortController();
 
   const body = { mode, prompt, params };
+  // Always send an explicit use_rag so the toggle's OFF state wins (the orchestrate
+  // service defaults use_rag from the roster only when the field is absent).
+  body.use_rag = !!opts.useRag;
   if (opts.useRag) {
-    body.use_rag = true;
     if (opts.ragTopK) body.rag_top_k = opts.ragTopK;
     if (typeof opts.ragMinScore === 'number') body.rag_min_score = opts.ragMinScore;
   }

@@ -27,8 +27,11 @@ export async function saveOrchestrateHistory({ prompt, result, mode, sessionId, 
  */
 export async function submitOrchestrate(mode, prompt, params = {}, opts = {}) {
   const body = { mode, prompt, params };
+  // Always send an explicit use_rag so the toggle's OFF state wins. The orchestrate
+  // service defaults use_rag from the roster only when the field is absent, so omitting
+  // it when off would let roster agents (use_rag=true) enable RAG against the user's intent.
+  body.use_rag = !!opts.useRag;
   if (opts.useRag) {
-    body.use_rag = true;
     if (opts.ragTopK) body.rag_top_k = opts.ragTopK;
     if (typeof opts.ragMinScore === 'number') body.rag_min_score = opts.ragMinScore;
     if (opts.ragRerank) body.rag_rerank = true;
